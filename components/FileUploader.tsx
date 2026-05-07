@@ -64,7 +64,7 @@ const FileUploader = <T extends FieldValues>({
                         ref={inputRef}
                         onChange={handleFileChange}
                         disabled={disabled}
-                        placeholder=''
+                        aria-label={label}
                     />
 
                     {isUploaded ? (
@@ -74,6 +74,8 @@ const FileUploader = <T extends FieldValues>({
                                 type="button"
                                 onClick={onRemove}
                                 className="upload-dropzone-remove mt-2"
+                                title="Remove file"
+                                aria-label="Remove file"
                             >
                                 <X className="w-5 h-5" />
                             </button>
