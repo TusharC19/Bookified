@@ -23,10 +23,10 @@
 
 // export { Label }
 
-import React from 'react'
+// // import React from 'react'
 
-export const label = () => {
-  return (
-    <div>label</div>
-  )
-}
+// // export const label = () => {
+// //   return (
+// //     <div>label</div>
+// //   )
+// // }
