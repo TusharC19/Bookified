@@ -32,6 +32,7 @@ export const useSubscription = () => {
         if (metadataPlan === 'pro') {
             plan = PLANS.PRO;
         } else if (metadataPlan === 'standard') {
+            
             plan = PLANS.STANDARD;
         }
     }
@@ -42,3 +43,6 @@ export const useSubscription = () => {
         isLoaded: true
     };
 };
+
+
+
