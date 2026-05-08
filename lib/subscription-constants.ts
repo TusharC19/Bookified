@@ -1,23 +1,40 @@
 export const PLANS = {
-    FREE: "free",
-    PRO: "pro",
+    FREE: 'free',
+    STANDARD: 'standard',
+    PRO: 'pro',
 } as const;
 
-export type PlanType = (typeof PLANS)[keyof typeof PLANS];
+export type PlanType = typeof PLANS[keyof typeof PLANS];
 
-export const PLAN_LIMITS: Record<PlanType, {
+export interface PlanLimits {
     maxBooks: number;
     maxSessionsPerMonth: number;
-    maxDurationMinutes: number;
-}> = {
+    maxDurationPerSession: number; // in minutes
+    hasSessionHistory: boolean;
+}
+
+export const PLAN_LIMITS: Record<PlanType, PlanLimits> = {
     [PLANS.FREE]: {
-        maxBooks: 3,
-        maxSessionsPerMonth: 20,
-        maxDurationMinutes: 15,
+        maxBooks: 1,
+        maxSessionsPerMonth: 5,
+        maxDurationPerSession: 5,
+        hasSessionHistory: false,
+    },
+    [PLANS.STANDARD]: {
+        maxBooks: 10,
+        maxSessionsPerMonth: 100,
+        maxDurationPerSession: 15,
+        hasSessionHistory: true,
     },
     [PLANS.PRO]: {
-        maxBooks: Number.MAX_SAFE_INTEGER,
-        maxSessionsPerMonth: Number.MAX_SAFE_INTEGER,
-        maxDurationMinutes: 60,
+        maxBooks: 100,
+        maxSessionsPerMonth: Infinity,
+        maxDurationPerSession: 60,
+        hasSessionHistory: true,
     },
+};
+
+export const getCurrentBillingPeriodStart = (): Date => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
 };
