@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   SignedIn,
@@ -18,6 +17,54 @@ const navItems = [
   { label: "Pricing", href: "/subscriptions" },
 ];
 
+const VoiceReadLogo = () => (
+  <svg 
+    width="32" 
+    height="32" 
+    viewBox="0 0 100 100" 
+    xmlns="http://www.w3.org/2000/svg"
+    className="flex-shrink-0"
+  >
+    {/* Book left page */}
+    <path 
+      d="M 25 15 L 50 15 L 50 85 L 25 85 Q 18 78 18 50 Q 18 22 25 15" 
+      fill="#0071e3" 
+      opacity="0.25"
+    />
+    
+    {/* Book right page */}
+    <path 
+      d="M 75 15 L 50 15 L 50 85 L 75 85 Q 82 78 82 50 Q 82 22 75 15" 
+      fill="#0071e3"
+    />
+    
+    {/* Microphone dot */}
+    <circle cx="50" cy="38" r="3.5" fill="#0071e3"/>
+    
+    {/* Microphone base */}
+    <rect x="47" y="42" width="6" height="6" rx="1" fill="#0071e3"/>
+    
+    {/* Sound wave 1 */}
+    <path 
+      d="M 50 28 Q 60 28 60 38 Q 60 48 50 48" 
+      stroke="#0071e3" 
+      strokeWidth="1.5" 
+      fill="none" 
+      strokeLinecap="round"
+    />
+    
+    {/* Sound wave 2 */}
+    <path 
+      d="M 50 22 Q 66 22 66 38 Q 66 54 50 54" 
+      stroke="#0071e3" 
+      strokeWidth="1.5" 
+      fill="none" 
+      strokeLinecap="round" 
+      opacity="0.5"
+    />
+  </svg>
+);
+
 const Navbar = () => {
   const pathName = usePathname();
   const { user } = useUser();
@@ -25,25 +72,8 @@ const Navbar = () => {
   return (
     <header className="w-full fixed z-50 bg-(--bg-primary)">
       <div className="wrapper navbar-height py-4 flex justify-between items-center">
-        <Link href="/" className="flex gap-2 items-center hover:opacity-80 transition-opacity">
-          <svg 
-            width="40" 
-            height="40" 
-            viewBox="0 0 200 200" 
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-blue-600"
-          >
-            <path d="M 50 40 L 100 40 L 100 160 L 50 160 Q 40 150 40 100 Q 40 50 50 40" fill="currentColor" opacity="0.2"/>
-            <path d="M 150 40 L 100 40 L 100 160 L 150 160 Q 160 150 160 100 Q 160 50 150 40" fill="currentColor"/>
-            <line x1="100" y1="40" x2="100" y2="160" stroke="currentColor" strokeWidth="1.5" opacity="0.4"/>
-            <circle cx="100" cy="75" r="7" fill="currentColor"/>
-            <rect x="96" y="82" width="8" height="12" rx="2" fill="currentColor"/>
-            <path d="M 100 55 Q 117 55 117 75 Q 117 95 100 95" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-            <path d="M 100 45 Q 132 45 132 75 Q 132 105 100 105" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.6"/>
-            <circle cx="85" cy="130" r="3" fill="currentColor" opacity="0.5"/>
-            <circle cx="100" cy="135" r="3" fill="currentColor" opacity="0.5"/>
-            <circle cx="115" cy="130" r="3" fill="currentColor" opacity="0.5"/>
-          </svg>
+        <Link href="/" className="flex gap-2.5 items-center hover:opacity-80 transition-opacity">
+          <VoiceReadLogo />
           <span className="logo-text">VoiceRead</span>
         </Link>
 
