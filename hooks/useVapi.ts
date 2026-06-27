@@ -170,39 +170,51 @@ export function useVapi(book: IBook) {
                 }
             },
 
-            error: (error: Error) => {
-                console.error('Vapi error:', error);
-                // Don't reset isStoppingRef here - delayed events may still fire
-                setStatus('idle');
-                setCurrentMessage('');
-                setCurrentUserMessage('');
+            error: (error: unknown) => {
+                console.error("Vapi error:", JSON.stringify(error, null, 2));
 
-                // Stop timer on error
+                setStatus("idle");
+                setCurrentMessage("");
+                setCurrentUserMessage("");
+
+                // Stop timer
                 if (timerRef.current) {
                     clearInterval(timerRef.current);
                     timerRef.current = null;
                 }
 
-                // End session tracking on error
+                // End session tracking
                 if (sessionIdRef.current) {
                     endVoiceSession(sessionIdRef.current, durationRef.current).catch((err) =>
-                        console.error('Failed to end voice session on error:', err),
+                        console.error("Failed to end voice session on error:", err),
                     );
                     sessionIdRef.current = null;
                 }
 
-                // Show user-friendly error message
-                const errorMessage = error.message?.toLowerCase() || '';
-                if (errorMessage.includes('timeout') || errorMessage.includes('silence')) {
-                    setLimitError('Session ended due to inactivity. Click the mic to start again.');
-                } else if (errorMessage.includes('network') || errorMessage.includes('connection')) {
-                    setLimitError('Connection lost. Please check your internet and try again.');
-                } else {
-                    setLimitError('Session ended unexpectedly. Click the mic to start again.');
+                // Handle custom payloads
+                if (typeof error === "object" && error !== null) {
+                    const e = error as { msg?: string; type?: string };
+
+                    if (e.type === "ejected") {
+                        setLimitError("Meeting has ended.");
+                        startTimeRef.current = null;
+                        return;
+                    }
+                    if (e.msg?.toLowerCase().includes("timeout") || e.msg?.toLowerCase().includes("silence")) {
+                        setLimitError("Session ended due to inactivity. Click the mic to start again.");
+                        return;
+                    }
+                    if (e.msg?.toLowerCase().includes("network") || e.msg?.toLowerCase().includes("connection")) {
+                        setLimitError("Connection lost. Please check your internet and try again.");
+                        return;
+                    }
                 }
 
+                // Fallback
+                setLimitError("Session ended unexpectedly. Click the mic to start again.");
                 startTimeRef.current = null;
-            },
+            }
+
         };
 
         // Register all handlers
